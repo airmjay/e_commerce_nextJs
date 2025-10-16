@@ -1,26 +1,37 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    background: #f5f5f5;
+    font-family: "open-sans" Sans-Serif;
+    color: #212529;
+}
+.heading-text {
+    font-family: "montsserat" Sans-Serif;
+}
+.brand-color {
+    background: #ff6f61;
+}
+.brand-text-color {
+    color: #ff6f61;
+}
+.button-color {
+    background: #0047ab;
+}
+.background-design {
+    position: absolute;
+    min-height: 100%;
+    width: 100vw;
+    background: linear-gradient(to right, brown, gray);
+    opacity: 0.2;
+    color: white;
+    z-index: 100;
+}
+.background-image {
+    background: url("/images/login.png");
+    background-position: top-center;
+    background-size: 100vw 100vh;
+    background-repeat: no-repeat;
+    object-fit: contain;
+    position: relative;
+    z-index: 1000;
 }
