@@ -14,7 +14,7 @@ const Track = () => {
         >
             <div className="background-design"></div>
             <div className="p-4 z-[10000] relative">
-                <Link href="/order" className="text-blue-700 underline">
+                <Link href="/customer/order" className="text-blue-700 underline">
                     Back to order
                 </Link>
                 <h2 className="font-bold text-lg">Tracking Status</h2>

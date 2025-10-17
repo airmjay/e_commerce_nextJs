@@ -1,11 +1,11 @@
 import React from "react";
 import Link from "next/link";
-const Order = () => {
+const Cart = () => {
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
                 <div className="cart-item shadow md:col-span-9 p-2 h-auto">
-                    <h3 className="font-bold text-md">ORDER (2)</h3>
+                    <h3 className="font-bold text-md">CART (2)</h3>
                     <ul>
                         <hr className="bg-gray-200 my-2" />
                         <li>
@@ -22,6 +22,9 @@ const Order = () => {
                                             <i className="fa-solid fa-naira-sign"></i>
                                             10,000
                                         </li>
+                                        <li className="text-sm text-red-700">
+                                            Unit Left: 30
+                                        </li>
                                     </ul>
                                 </div>
 
@@ -31,17 +34,17 @@ const Order = () => {
                                 </div>
                             </div>
                             <div className="removeItemAndIncrease flex items-center justify-between">
-                                <Link
-                                    href="/track"
-                                    className="bg-blue-600 p-1 rounded mt-2 text-white"
-                                >
-                                    <i className="fa-solid fa-location-dot text-sm"></i>
-                                    Track Order
-                                </Link>
+                                <button className="bg-red-500 p-1 rounded mt-2 text-white">
+                                    <i className="fa-solid fa-trash text-sm"></i>
+                                    Remove
+                                </button>
                                 <div>
-                                    <button className="bg-red-500 text-center p-1 rounded mt-2 text-white">
-                                        <i className="fa-solid fa-xmark"></i> Cancel
-                                        Order
+                                    (1)
+                                    <button className="bg-red-500 text-center px-2 rounded mt-2 text-white">
+                                        -
+                                    </button>
+                                    <button className="button-color text-center px-2 rounded mt-2 text-white">
+                                        +
                                     </button>
                                 </div>
                             </div>
@@ -63,6 +66,9 @@ const Order = () => {
                                             <i className="fa-solid fa-naira-sign"></i>
                                             10,000
                                         </li>
+                                        <li className="text-sm text-red-700">
+                                            Unit Left: 30
+                                        </li>
                                     </ul>
                                 </div>
 
@@ -72,17 +78,17 @@ const Order = () => {
                                 </div>
                             </div>
                             <div className="removeItemAndIncrease flex items-center justify-between">
-                                <a
-                                    href="track.html"
-                                    className="bg-blue-600 p-1 rounded mt-2 text-white"
-                                >
-                                    <i className="fa-solid fa-location-dot text-sm"></i>
-                                    Track Order
-                                </a>
+                                <button className="bg-red-500 p-1 rounded mt-2 text-white">
+                                    <i className="fa-solid fa-trash text-sm"></i>
+                                    Remove
+                                </button>
                                 <div>
-                                    <button className="bg-red-500 text-center p-1 rounded mt-2 text-white">
-                                        <i className="fa-solid fa-xmark"></i> Cancel
-                                        Order
+                                    (1)
+                                    <button className="bg-red-500 text-center px-2 rounded mt-2 text-white">
+                                        -
+                                    </button>
+                                    <button className="button-color text-center px-2 rounded mt-2 text-white">
+                                        +
                                     </button>
                                 </div>
                             </div>
@@ -90,7 +96,7 @@ const Order = () => {
                     </ul>
                 </div>
                 <div className="sub-total shadow md:col-span-3 h-[150px] p-2">
-                    <h3 className="font-bold">Order Summary</h3>
+                    <h3 className="font-bold">Cart Summary</h3>
                     <hr className="bg-gray-200 my-2" />
                     <div>
                         <ul className="flex justify-between">
@@ -99,17 +105,19 @@ const Order = () => {
                                 <i className="fa-solid fa-naira-sign"></i>10,000
                             </li>
                         </ul>
-                        <hr className="bg-gray-200 my-2" />
-                        <span className="font-bold text-green-600">
-                            <i className="fa-solid fa-money-bill"></i>Payment
-                            Status: <br />
-                            <i className="fa-solid fa-truck-fast"></i> Pay On
-                            Delivery
-                        </span>
+                        <Link
+                            href="/customer/order"
+                            className="block button-color mt-4 text-white font-serif p-2 rounded"
+                        >
+                            Checkout
+                            <span>
+                                (<i className="fa-solid fa-naira-sign"></i>
+                                10,000)
+                            </span>
+                        </Link>
                     </div>
                 </div>
             </div>
-
             <div id="RecentView" className="text-white mb-2 py-2">
                 <hr />
                 <div className="flex brand-color justify-between items-center p-2 mb-2">
@@ -190,4 +198,4 @@ const Order = () => {
     );
 };
 
-export default Order;
+export default Cart;

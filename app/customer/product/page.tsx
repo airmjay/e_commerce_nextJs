@@ -1,4 +1,3 @@
-
 import ProductSpecification from "./components/ProductSpecification";
 import React from "react";
 

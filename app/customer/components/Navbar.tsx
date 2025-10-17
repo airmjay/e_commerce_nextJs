@@ -8,7 +8,7 @@ const Navbar = () => {
                 A<span className="hidden md:inline-block">SWAD</span>
             </Link>
             <div className="flex">
-                <div className="w-auto md:w-full border rounded p-2">
+                <div className="w-auto md:w-full border p-2">
                     <i className="fa-solid fa-magnifying-glass text-gray-400"></i>
                     <input
                         type="search"
@@ -37,7 +37,7 @@ const Navbar = () => {
                     </div>
                 </div>
                 <div className="cartSection">
-                    <Link href="/cart" className="flex items-center">
+                    <Link href="/customer/cart" className="flex items-center">
                         <i className="fa-solid fa-cart-shopping brand-text-color"></i>
                         <span className="hidden md:inline">Cart</span>
                     </Link>

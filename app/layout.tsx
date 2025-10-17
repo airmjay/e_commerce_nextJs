@@ -30,12 +30,7 @@ export default function RootLayout({
                 <link rel="stylesheet" href="/font/css/all.css"></link>
             </head>
             <body>
-                <div className="p-2 body-content-no-footer">
-                    <Navbar />
-
                     {children}
-                </div>
-                <Footer />
             </body>
         </html>
     );

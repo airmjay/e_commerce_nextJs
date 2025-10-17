@@ -107,75 +107,75 @@ const ProductSpecification = () => {
                 </div>
             </div>
 
-            <div id="RecentView" class="text-white mb-2 py-2">
+            <div id="RecentView" className="text-white mb-2 py-2">
                 <hr />
-                <div class="flex brand-color justify-between items-center p-2 mb-2">
+                <div className="flex brand-color justify-between items-center p-2 mb-2">
                     <div>Similar Product</div>
                     <div>See All</div>
                 </div>
-                <hr class="bg-gray-200 my-2" />
-                <div class="product-card grid xs-grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 text-gray-900 gap-2">
+                <hr className="bg-gray-200 my-2" />
+                <div className="product-card grid xs-grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 text-gray-900 gap-2">
                     <article>
-                        <figure class="product-card-image shadow flex-col gap-1">
+                        <figure className="product-card-image shadow flex-col gap-1">
                             <img
-                                class="border h-[150px] w-auto"
+                                className="border h-[150px] w-auto"
                                 src="logo"
                                 alt="price card-image"
                             />
-                            <figcaption class="p-2">
-                                <div class="text-md text-gray-600">
+                            <figcaption className="p-2">
+                                <div className="text-md text-gray-600">
                                     Skiter Kitto1
                                 </div>
-                                <div class="flex items-center text-sm text-black font-serif">
-                                    <i class="fa-solid ml-0 fa-naira-sign text-black text-sm"></i>
+                                <div className="flex items-center text-sm text-black font-serif">
+                                    <i className="fa-solid ml-0 fa-naira-sign text-black text-sm"></i>
                                     100,000
                                 </div>
                             </figcaption>
                         </figure>
                     </article>
                     <article>
-                        <figure class="product-card-image shadow flex-col gap-1">
+                        <figure className="product-card-image shadow flex-col gap-1">
                             <img
-                                class="border h-[150px] w-auto"
+                                className="border h-[150px] w-auto"
                                 src="logo"
                                 alt="price card-image"
                             />
-                            <figcaption class="p-2">
+                            <figcaption className="p-2">
                                 <div>Skiter Kitto</div>
-                                <div class="flex items-center text-sm text-black font-serif">
-                                    <i class="fa-solid fa-naira-sign text-black text-sm"></i>
+                                <div className="flex items-center text-sm text-black font-serif">
+                                    <i className="fa-solid fa-naira-sign text-black text-sm"></i>
                                     100,000
                                 </div>
                             </figcaption>
                         </figure>
                     </article>
                     <article>
-                        <figure class="product-card-image shadow flex-col gap-1">
+                        <figure className="product-card-image shadow flex-col gap-1">
                             <img
-                                class="border h-[150px] w-auto"
+                                className="border h-[150px] w-auto"
                                 src="logo"
                                 alt="price card-image"
                             />
-                            <figcaption class="p-2">
+                            <figcaption className="p-2">
                                 <div>Skiter Kitto</div>
-                                <div class="flex items-center text-sm text-black font-serif">
-                                    <i class="fa-solid fa-naira-sign text-black text-sm"></i>
+                                <div className="flex items-center text-sm text-black font-serif">
+                                    <i className="fa-solid fa-naira-sign text-black text-sm"></i>
                                     100,000
                                 </div>
                             </figcaption>
                         </figure>
                     </article>
                     <article>
-                        <figure class="product-card-image shadow flex-col gap-1">
+                        <figure className="product-card-image shadow flex-col gap-1">
                             <img
-                                class="border h-[150px] w-auto"
+                                className="border h-[150px] w-auto"
                                 src="logo"
                                 alt="price card-image"
                             />
-                            <figcaption class="p-2">
+                            <figcaption className="p-2">
                                 <div>Skiter Kitto</div>
-                                <div class="flex items-center text-sm text-black font-serif">
-                                    <i class="fa-solid fa-naira-sign text-black text-sm"></i>
+                                <div className="flex items-center text-sm text-black font-serif">
+                                    <i className="fa-solid fa-naira-sign text-black text-sm"></i>
                                     100,000
                                 </div>
                             </figcaption>
