@@ -10,8 +10,13 @@ const Footer = () => {
                     <ul>
                         <li>Subcribe</li>
                         <li>
-                            <input className="p-2 rounded" type="text" />
-                            <button className="brand-color p-2">Subcribe</button>
+                            <input
+                                className="p-2           round border border-white"
+                                type="text"
+                            />
+                            <button className="brand-color p-2">
+                                Subcribe
+                            </button>
                         </li>
                     </ul>
                 </li>
@@ -48,11 +53,12 @@ const Footer = () => {
                             <i className="fa-solid fa-phone ml-2"></i>Contact-us
                         </li>
                         <li>
-                            <i className="fa-solid fa-question ml-1"></i>Help Center
+                            <i className="fa-solid fa-question ml-1"></i>Help
+                            Center
                         </li>
                         <li>
-                            <i className="fa-solid fa-envelope ml-1"></i>Chat With
-                            Us
+                            <i className="fa-solid fa-envelope ml-1"></i>Chat
+                            With Us
                         </li>
                     </ul>
                 </li>

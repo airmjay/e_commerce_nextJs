@@ -1,5 +1,5 @@
 import React from "react";
-
+import Slider from "../../components/Slider";
 const Banner = () => {
     return (
         <div id="Banner" className="flex gap-2 mb-2">
@@ -9,8 +9,8 @@ const Banner = () => {
                     <li>SignOut</li>
                     <li>SignUp</li>
                 </ul>
-                <hr className="border my-1 bg-gray-400" />
-                <ul className="border p-2 flex-col space-y-4">
+
+                <ul className="border p-2 flex-col space-y-4 h-auto md:min-h-[350px]">
                     <li className="hover:text-gray-600 cursor-pointer">
                         <i className="fa-solid fa-vest-patches"></i>Fashion
                     </li>
@@ -39,8 +39,10 @@ const Banner = () => {
             </div>
             <div
                 id="BannerSlider"
-                className="w-full md:w-[80vw] bg-red-400 h-auto min-h-[200px]"
-            ></div>
+                className="w-full md:w-[80vw] bg-red-400  max-h-[350px]"
+            >
+                <Slider />
+            </div>
         </div>
     );
 };
