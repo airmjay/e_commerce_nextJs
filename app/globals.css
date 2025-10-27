@@ -4,6 +4,7 @@ body {
     background: #f5f5f5;
     font-family: "open-sans" Sans-Serif;
     color: #212529;
+    position: relative;
 }
 .heading-text {
     font-family: "montsserat" Sans-Serif;

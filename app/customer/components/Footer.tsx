@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
     return (
-        <div id="Footer" className="bg-[#2c2c2c] text-white p-4 a">
+        <div id="Footer" className="relative bottom-0 w-full bg-[#2c2c2c] text-white p-4 a">
             <ul className="grid justify-center lg:justify-between text-center md:text-left lg:text-left sm-grid-cols-1 md:grid-cols-2 lg:grid-cols-3 sm:gap-4 gap-2 mb-4">
                 <li className="font-bold text-lg">ASWAD</li>
                 <li>
