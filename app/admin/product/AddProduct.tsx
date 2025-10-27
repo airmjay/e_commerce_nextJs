@@ -92,7 +92,7 @@ const AddProduct = () => {
                     formData.append(key, sanitizedInput[key]);
                 }
             });
-            const addProduct = await fetch("/api/product", { method: "POST", body: formData });
+            const addProduct = await fetch("/api/product", { method: "POST", body: formData, Content_Type : "multipart/form-data" });
             alert("Product is added");
         } catch (e) {
             if (e instanceof z.ZodError) {

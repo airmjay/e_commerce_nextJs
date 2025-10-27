@@ -19,15 +19,15 @@ const sanitizeInput = input => {
 };
 // CREATE: Insert a new item
 export async function POST(request) {
-    console.log(request, { error: "Only data is empty look 😂" });
     const formData = await request.formData();
+    console.log(formData, { error: "Only data is empty look 😂" });
     const input = {
         name: formData.get("name"),
         description: formData.get("description"),
-        image: formData.get("image"),
-        price: formData.get("price"),
-        category: formData.get("category"),
-        unit: formData.get("unit"),
+        image: formData.get("image").name,
+        price: Number(formData.get("price")),
+        category: Number(formData.get("category")),
+        unit: Number(formData.get("unit")),
         specification: formData.get("specification")
     };
     const sanitized = sanitizeInput(input);
@@ -54,15 +54,15 @@ export async function POST(request) {
             },
             { status: 201 }
         );
-    } catch (error) {
-        if (error instanceof z.ZodError) {
-            return NextResponse.json({ errors: error.issues }, { status: 500 });
-        }
-        return NextResponse.json(
-            { error: "Internal server error" },
-            { status: 501 }
-        );
-    }
+   } catch (error) {
+       if (error instanceof z.ZodError) {
+           return NextResponse.json({ errors: error.issues }, { status: 500 });
+       }
+       return NextResponse.json(
+           { error: "Internal server error" },
+           { status: 501 }
+      );
+  }
 }
 
 // READ: Get all product
