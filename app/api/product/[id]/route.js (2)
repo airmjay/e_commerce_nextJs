@@ -1,0 +1,25 @@
+import { NextResponse, NextRequest } from "next/server";
+import pool from "../../../../libs/db";
+interface Props {
+    params: {id: number};
+}
+
+// READ: Get single product
+
+export async function GET({ params: id }: Props) {
+    const result = await id;
+    return NextResponse.json({
+        get_result: `The result compile is equal = ${result} 😂😂😂😂😂😂😂😂😂😂`
+    });
+
+    // const [rows] = await pool.query(`SELECT * FROM product WHERE id = ?`, [id]);
+    // if (rows) {
+    //     return NextResponse.json(rows);
+    // }
+    // } catch (error) {
+    //     return NextResponse.json(
+    //         { error: "Failed to fetch items" },
+    //         { status: 500 }
+    //     );
+    // }
+}

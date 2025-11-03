@@ -1,11 +1,11 @@
 "use client";
 import React, { HTMLInputElement, useEffect, useState } from "react";
 import sanitizeHtml from "sanitize-html";
-import { Input, SelectInput } from "../components/Input";
-import Button from "../components/Button";
-import Form from "../components/Form";
-import TextArea from "../components/TextArea";
-import { productSchema, z } from "../../zod/Validation";
+import { Input, SelectInput } from "../../components/Input";
+import Button from "../../components/Button";
+import Form from "../../components/Form";
+import TextArea from "../../components/TextArea";
+import { productSchema, z } from "../../../zod/Validation";
 const AddProduct = () => {
     const [body, setBody] = useState({
         name: {
@@ -92,7 +92,11 @@ const AddProduct = () => {
                     formData.append(key, sanitizedInput[key]);
                 }
             });
-            const addProduct = await fetch("/api/product", { method: "POST", body: formData, Content_Type : "multipart/form-data" });
+            const addProduct = await fetch("/api/product", {
+                method: "POST",
+                body: formData,
+                Content_Type: "multipart/form-data"
+            });
             alert("Product is added");
         } catch (e) {
             if (e instanceof z.ZodError) {
@@ -113,7 +117,6 @@ const AddProduct = () => {
 
     return (
         <>
-            {JSON.stringify(body)}
             <Form submit={e => addApi(e)} FormTitle="Product Form">
                 <Input
                     onChange={e => handleEvent(e)}

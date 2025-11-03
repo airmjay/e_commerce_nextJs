@@ -2,6 +2,9 @@ import pool from "../../../libs/db";
 import { NextResponse, NextRequest } from "next/server";
 import sanitizeHtml from "sanitize-html";
 import { productSchema, z } from "../../zod/Validation";
+import { join } from "path";
+import { randomUUID } from "crypto";
+import { writeFile } from "fs/promises";
 
 const sanitizeInput = input => {
     const sanitized = {};
@@ -21,6 +24,7 @@ const sanitizeInput = input => {
 export async function POST(request) {
     const formData = await request.formData();
     console.log(formData, { error: "Only data is empty look 😂" });
+
     const input = {
         name: formData.get("name"),
         description: formData.get("description"),
@@ -30,6 +34,17 @@ export async function POST(request) {
         unit: Number(formData.get("unit")),
         specification: formData.get("specification")
     };
+    const file = formData.get("image");
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    const fileuploadName =
+        randomUUID().slice(0, 8) +
+        Date.now() +
+        "." +
+        getFileExtension(input.image);
+    const filepath = join(process.cwd(), "public/uploads/", fileuploadName);
+
+    await writeFile(filepath, buffer);
     const sanitized = sanitizeInput(input);
     try {
         productSchema.parse(sanitized);
@@ -42,7 +57,7 @@ export async function POST(request) {
                 input.unit,
                 input.category,
                 input.price,
-                input.image
+                fileuploadName
             ]
         );
 
@@ -54,18 +69,17 @@ export async function POST(request) {
             },
             { status: 201 }
         );
-   } catch (error) {
-       if (error instanceof z.ZodError) {
-           return NextResponse.json({ errors: error.issues }, { status: 500 });
-       }
-       return NextResponse.json(
-           { error: "Internal server error" },
-           { status: 501 }
-      );
-  }
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            return NextResponse.json({ errors: error.issues }, { status: 500 });
+        }
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 501 }
+        );
+    }
 }
 
-// READ: Get all product
 export async function GET() {
     try {
         const [rows] = await pool.query("SELECT * FROM product");
@@ -76,4 +90,12 @@ export async function GET() {
             { status: 500 }
         );
     }
+}
+
+function getFileExtension(filename) {
+    const parts = filename.split(".");
+    if (parts.length > 1) {
+        return parts.pop(); // Returns the last element (extension)
+    }
+    return ""; // No extension found
 }

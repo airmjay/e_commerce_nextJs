@@ -20,7 +20,9 @@ const layout = ({
 
                 <div className="grid grid-cols-1 md:grid-cols-12">
                     <SideBar />
+                    <div className='col-span-9 p-2'>
                     {children}
+                    </div>
                 </div>
             </body>
         </html>
