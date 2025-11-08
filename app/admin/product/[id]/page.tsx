@@ -1,4 +1,4 @@
-import { Input, SelectInput } from "../../components/Input";
+import { Input } from "../../components/Input";
 import TextArea from "../../components/TextArea";
 import Image from "next/image";
 import Link from "next/link";
@@ -50,12 +50,12 @@ const page = async ({ params }: { params: { id: number } }) => {
                 value={product.name}
             />
             <Input
-                readOnly
                 label="Product Specification"
                 placeholder="Enter Your Product Specification"
                 type="text"
                 name="specification"
                 value={product.specification}
+                readOnly
             />
             <Input
                 readOnly
@@ -65,7 +65,7 @@ const page = async ({ params }: { params: { id: number } }) => {
                 name="unit"
                 value={product.unit}
             />
-            <SelectWithConsumeApiFetch readOnly id={product.category_id} />
+            <SelectWithConsumeApiFetch readonly={true} id={product.category_id} />
 
             <Input
                 value={product.price}
@@ -76,12 +76,12 @@ const page = async ({ params }: { params: { id: number } }) => {
                 name="price"
             />
             <TextArea
-                readOnly
                 value={product.description}
                 col_span="col-span-12"
                 label="Product description"
                 placeholder="Enter Your Product Description"
                 name="description"
+
             />
             <Link
                 href={`/admin/product/edit/${product.id}`}

@@ -1,12 +1,21 @@
 "use client"
 import { SelectInput } from "./Input";
-import { useEffect, useState } from "react";
-const SelectWithConsumeApiFetch = ({ ...rest }, id) => {
+import React, { useEffect, useState } from "react";
+import Category from '../../customer/products/components/Category';
+interface Props{
+   id : number;
+   readonly? : boolean | undefined
+}
+interface Category { 
+    name?: string;
+    id?: number;
+}
+const SelectWithConsumeApiFetch = ({readonly, id, ...rest} : Props ) => {
     const [isLoading, setIsloading] = useState(true);
-    const [category, setCategory] = useState([]);
+    const [category, setCategory] = useState<Category[]>([]);
     useEffect(() => {
         const fetchData = async () => {
-            const res = await fetch(`http://localhost:3000/api/category`);
+            const res  = await fetch(`http://localhost:3000/api/category`);
             const categories = await res.json();
             if (categories) {
                 setCategory(categories);
@@ -18,14 +27,13 @@ const SelectWithConsumeApiFetch = ({ ...rest }, id) => {
     if (isLoading) return "loading";
     return (
         <SelectInput
-            readOnly
-            name="category"
+            readOnly={readonly}
             label="Product Category"
             placeholder="Enter Your Product Category"
             {...rest}
         >
             {category.map(item =>
-                item.id == id ? (
+                item.id == Number(id) ? (
                     <option key={item.id} value={item.id} selected>
                         {item.name}
                     </option>
@@ -40,11 +48,11 @@ const SelectWithConsumeApiFetch = ({ ...rest }, id) => {
 };
 const SelectWithConsumeApiFetchAll = ({ ...rest }) => {
     const [isLoading, setIsloading] = useState(true);
-    const [category, setCategory] = useState([]);
+    const [category, setCategory] = useState<Category[]>([]);
     useEffect(() => {
         const fetchData = async () => {
             const res = await fetch(`http://localhost:3000/api/category`);
-            const categories = await res.json();
+            const categories  = await res.json();
             if (categories) {
                 setCategory(categories);
                 setIsloading(false);

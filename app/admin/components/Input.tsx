@@ -1,26 +1,28 @@
-import React from "react";
+import React, { CSSProperties } from "react";
+
 interface Props {
     label?: string;
     placeholder?: string;
     type?: string;
     children?: React.ReactNode;
-    style?: string;
+    style?: CSSProperties | undefined;
     name?: string;
     error?: string;
+    readOnly?: boolean;
     value?: string | number | readonly string[]; // Add common value types
-
     onChange?: (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => void;
 }
-const Input = ({ style, label, placeholder, error, type, ...rest }: Props) => {
+const Input = ({ style, label, placeholder, error, type, readOnly ,...rest }: Props) => {
     return (
         <div className={`col-span-6 ${style || ""}`}>
             <label className="block mb-2 text-gray-500">{label}</label>
-            <input
+            <input 
                 type={type}
                 className="border p-2 outline-0 border-gray-200 w-[100%]"
                 placeholder={placeholder}
+                readOnly={readOnly}
                 {...rest}
             />
             <span className="text-red-400 text-sm"> {error}</span>
@@ -32,14 +34,15 @@ const SelectInput = ({
     label,
     children,
     error,
-    placeholder,
+    readOnly,
     ...rest
-}: Props) => {
+     }: Props) => {
     return (
         <div className="col-span-6">
             <label className="block mb-2 text-gray-500">{label}</label>
-            <select
+            <select 
                 className="border p-2 outline-0 border-gray-200 w-[100%]"
+                disabled={readOnly}
                 {...rest}
             >
                 {children}

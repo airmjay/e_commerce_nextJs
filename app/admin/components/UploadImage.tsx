@@ -5,7 +5,7 @@ interface Props {
 const UploadImage = async ({ file }: Props) => {
     if (!file) {
         try {
-            const data = new formData();
+            const data = new FormData();
             return data.set("file", file);
         } catch (e) {
             console.log(e);

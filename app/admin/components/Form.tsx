@@ -4,7 +4,7 @@ interface Props {
     children: React.ReactNode;
     action: string;
     method: string;
-    submit: (e) => void;
+    submit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 const Form = ({ submit, method, action, FormTitle, children }: Props) => {
     return (

@@ -1,5 +1,5 @@
 "use client";
-import React, { HTMLInputElement, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import sanitizeHtml from "sanitize-html";
 import { Input } from "../../components/Input";
 import Button from "../../components/Button";
