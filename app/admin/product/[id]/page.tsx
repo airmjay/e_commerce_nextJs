@@ -2,12 +2,15 @@ import { Input, SelectInput } from "../../components/Input";
 import TextArea from "../../components/TextArea";
 import Image from "next/image";
 import Link from "next/link";
-import SelectWithConsumeApiFetch from "../../components/SelectWithConsumeApiFetch";
+import { SelectWithConsumeApiFetch } from "../../components/SelectWithConsumeApiFetch";
 
 const page = async ({ params }: { params: { id: number } }) => {
     const get_id = params.id;
-    const res = await fetch(`http://localhost:3000/api/product/${get_id}`);
+    const res = await fetch(`http://localhost:3000/api/product/${get_id}`, {
+        method: "GET"
+    });
     const products = await res.json();
+    if (Object.keys(products).length === 0) return <div>Product Not Found</div>;
     const product = products[0];
     return (
         <div className="grid grid-cols-12 gap-2">
@@ -62,7 +65,7 @@ const page = async ({ params }: { params: { id: number } }) => {
                 name="unit"
                 value={product.unit}
             />
-            <SelectWithConsumeApiFetch readOnly id={product.category_id}/>
+            <SelectWithConsumeApiFetch readOnly id={product.category_id} />
 
             <Input
                 value={product.price}
@@ -80,6 +83,12 @@ const page = async ({ params }: { params: { id: number } }) => {
                 placeholder="Enter Your Product Description"
                 name="description"
             />
+            <Link
+                href={`/admin/product/edit/${product.id}`}
+                className="col-span-4 rounded text-white p-2 bg-blue-700 hover:bg-blue-500"
+            >
+                Update Product
+            </Link>
         </div>
     );
 };

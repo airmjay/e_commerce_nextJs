@@ -1,13 +1,29 @@
 "use client";
 import React, { HTMLInputElement, useEffect, useState } from "react";
+import { useTransition } from "react";
+import GetData from "./GetData";
 import sanitizeHtml from "sanitize-html";
-import { Input } from "../../components/Input";
-import Button from "../../components/Button";
-import Form from "../../components/Form";
-import TextArea from "../../components/TextArea";
-import {SelectWithConsumeApiFetchAll} from "../../components/SelectWithConsumeApiFetch";
-import { productSchema, z } from "../../../zod/Validation";
-const AddProduct = () => {
+import { Input, SelectInput } from "../../../components/Input";
+import Button from "../../../components/Button";
+import Form from "../../../components/Form";
+import TextArea from "../../../components/TextArea";
+import { SelectWithConsumeApiFetchAll } from "../../../components/SelectWithConsumeApiFetch";
+import { productSchema, z } from "../../../../zod/Validation";
+import { useRouter } from "next/navigation";
+interface ProductType {
+    name: string;
+    description: string;
+    specification: string;
+    unit: int;
+    category: string;
+    price: int;
+    image: null;
+}
+export default function ProductEdit({ productId }) {
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+    const [isLoading, setIsLoading] = useState(true);
+    const [checkExist, setCheckExist] = useState(0);
     const [body, setBody] = useState({
         name: {
             input: "",
@@ -38,7 +54,59 @@ const AddProduct = () => {
             error: ""
         }
     });
+    const [product, setProduct] = useState<ProductType | undefined>({});
+    const id = parseInt(productId);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await fetch(
+                    `http://localhost:3000/api/product/${id}`,
+                    {
+                        cache: "no-store",
+                        method: "GET"
+                    }
+                );
 
+                const products = await res.json();
+                const fetchedProduct = products[0];
+                if (fetchedProduct) {
+                    setProduct(fetchedProduct);
+
+                    // Populate form after data is fetched
+                    setBody({
+                        name: { input: fetchedProduct.name || "", error: "" },
+                        description: {
+                            input: fetchedProduct.description || "",
+                            error: ""
+                        },
+                        specification: {
+                            input: fetchedProduct.specification || "",
+                            error: ""
+                        },
+                        unit: { input: fetchedProduct.unit || "", error: "" },
+                        category: {
+                            input: fetchedProduct.category_id || "",
+                            error: ""
+                        },
+                        price: { input: fetchedProduct.price || "", error: "" },
+                        image: { input: null, error: "" },
+                        id: { input: fetchedProduct.id },
+                        filename: { input: fetchedProduct.image }
+                    });
+                    setCheckExist(1);
+                }
+            } catch (err) {
+                console.error("Fetch error:", err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchData();
+    }, [id]);
+    if (isLoading) return <div>Loading</div>;
+
+    if (JSON.stringify(Object.keys(product).length) == 0)
+        return <div>Product Not Found</div>;
     const handleEvent = e => {
         const { name, value, files } = e.target;
         const updatedValue = ["unit", "price", "category"].includes(name)
@@ -49,11 +117,7 @@ const AddProduct = () => {
 
         setBody({
             ...body,
-            [name]: {
-                ...body[name],
-                input: updatedValue,
-                error: ""
-            }
+            [name]: { input: updatedValue, error: "" }
         });
     };
     const sanitizeInput = input => {
@@ -71,17 +135,19 @@ const AddProduct = () => {
         }
         return sanitized;
     };
-    async function addApi(e) {
+    async function UpdateApi(e) {
         e.preventDefault();
 
         const input = {
             name: body.name.input,
             description: body.description.input,
             image: body.image.input,
-            price: body.price.input,
-            category: body.category.input,
-            unit: body.unit.input,
-            specification: body.specification.input
+            price: Number(body.price.input),
+            category: Number(body.category.input),
+            unit: Number(body.unit.input),
+            specification: body.specification.input,
+            id: Number(body.id.input),
+            filename: body.filename.input
         };
         const sanitizedInput = sanitizeInput(input);
         try {
@@ -93,12 +159,24 @@ const AddProduct = () => {
                     formData.append(key, sanitizedInput[key]);
                 }
             });
-            const addProduct = await fetch("/api/product", {
-                method: "POST",
-                body: formData,
-                Content_Type: "multipart/form-data"
+
+            startTransition(async () => {
+                const addProduct = await fetch(
+                    `/api/product/${input.id}`,
+                    {
+                        method: "PUT",
+                        body: formData,
+                        Content_Type: "multipart/form-data"
+                    },
+                    { cache: "no-store" }
+                );
+                if (addProduct.ok) {
+                    alert("Product is Update");
+                    router.push("/admin/product/");
+                } else {
+                    alert("Product is not updated");
+                }
             });
-            alert("Product is added");
         } catch (e) {
             if (e instanceof z.ZodError) {
                 // Map Zod errors to the body state
@@ -116,9 +194,10 @@ const AddProduct = () => {
         }
     }
 
+    // return <div>{JSON.stringify(product)}</div>;
     return (
         <>
-            <Form submit={e => addApi(e)} FormTitle="Product Form">
+            <Form submit={e => UpdateApi(e)} FormTitle="Product Form">
                 <Input
                     onChange={e => handleEvent(e)}
                     label="Product Name"
@@ -180,10 +259,12 @@ const AddProduct = () => {
                     placeholder="Enter Your Product Description"
                     name="description"
                 />
-                <Button style="col-span-6" text="Add Product" />
+                <Button
+                    disabled={isPending}
+                    style="col-span-6"
+                    text="Update Product"
+                />
             </Form>
         </>
     );
-};
-
-export default AddProduct;
+}

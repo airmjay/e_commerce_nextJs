@@ -42,8 +42,6 @@ const SelectInput = ({
                 className="border p-2 outline-0 border-gray-200 w-[100%]"
                 {...rest}
             >
-                <option value="test input">Select {label}</option>
-                <option value="1">Select car</option>
                 {children}
             </select>
             <span className="text-red-400 text-sm">{error}</span>

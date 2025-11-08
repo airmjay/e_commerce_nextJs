@@ -1,12 +1,21 @@
+"use client"
 import { SelectInput } from "./Input";
-export default async function SelectWithConsumeApiFetch(
-    { ...rest },
-     id
-) {
-    const get_id = id;
-    const res = await fetch(`http://localhost:3000/api/category`);
-    const categories = await res.json();
-
+import { useEffect, useState } from "react";
+const SelectWithConsumeApiFetch = ({ ...rest }, id) => {
+    const [isLoading, setIsloading] = useState(true);
+    const [category, setCategory] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await fetch(`http://localhost:3000/api/category`);
+            const categories = await res.json();
+            if (categories) {
+                setCategory(categories);
+                setIsloading(false);
+            }
+        };
+        fetchData();
+    }, []);
+    if (isLoading) return "loading";
     return (
         <SelectInput
             readOnly
@@ -15,15 +24,49 @@ export default async function SelectWithConsumeApiFetch(
             placeholder="Enter Your Product Category"
             {...rest}
         >
-            {categories.map(item =>
-                item.id == get_id ? (
-                    <option value={item.id} selected>
+            {category.map(item =>
+                item.id == id ? (
+                    <option key={item.id} value={item.id} selected>
                         {item.name}
                     </option>
                 ) : (
-                    <option value={item.id}>{item.name}</option>
+                    <option key={item.id} value={item.id}>
+                        {item.name} {item.id}
+                    </option>
                 )
             )}
         </SelectInput>
     );
-}
+};
+const SelectWithConsumeApiFetchAll = ({ ...rest }) => {
+    const [isLoading, setIsloading] = useState(true);
+    const [category, setCategory] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await fetch(`http://localhost:3000/api/category`);
+            const categories = await res.json();
+            if (categories) {
+                setCategory(categories);
+                setIsloading(false);
+            }
+        };
+        fetchData();
+    }, []);
+    if (isLoading) return "loading";
+    return (
+        <SelectInput
+            readOnly
+            name="category"
+            label="Product Category"
+            placeholder="Enter Your Product Category"
+            {...rest}
+        >
+            {category.map(item => (
+                <option key={item.id} value={item.id}>
+                    {item.name} {item.id}
+                </option>
+            ))}
+        </SelectInput>
+    );
+};
+export { SelectWithConsumeApiFetchAll, SelectWithConsumeApiFetch };

@@ -3,10 +3,11 @@ interface Props {
     style: string;
     text: string;
 }
-const Button = ({ style, text }: Props) => {
+const Button = ({ style, text,...rest }: Props) => {
     return (
         <button
             className={`w-full button-color cursor-pointer hover:bg-blue-500 hover:text-gray-200 p-2 text-white outline-0 border-0 ${style}`}
+            {...rest}
         >
             {text}
         </button>
