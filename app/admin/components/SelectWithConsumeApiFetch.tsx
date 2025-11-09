@@ -2,10 +2,7 @@
 import { SelectInput } from "./Input";
 import React, { useEffect, useState } from "react";
 import Category from "../../customer/products/components/Category";
-interface Props {
-  id?: number;
-  readonly?: boolean | undefined;
-}
+
 interface Category {
   name?: string;
   id?: number;
@@ -20,12 +17,15 @@ interface Props {
   error: string;
   value: string;
   label: string;
+  readonly?: boolean | undefined;
   placeholder: string;
+  id: number;
 }
 const SelectWithConsumeApiFetch = ({
   id,
   placeholder,
   label,
+  readonly,
   ...rest
 }: Props) => {
   const [isLoading, setIsloading] = useState(true);
@@ -43,7 +43,12 @@ const SelectWithConsumeApiFetch = ({
   }, []);
   if (isLoading) return "loading";
   return (
-    <SelectInput label={label} placeholder={placeholder} {...rest}>
+    <SelectInput
+      readOnly={readonly}
+      label={label}
+      placeholder={placeholder}
+      {...rest}
+    >
       {category.map((item) =>
         item.id == Number(id) ? (
           <option key={item.id} value={item.id} defaultValue={item.id}>

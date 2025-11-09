@@ -7,9 +7,6 @@ import Form from "../../components/Form";
 import TextArea from "../../components/TextArea";
 import { SelectWithConsumeApiFetchAll } from "../../components/SelectWithConsumeApiFetch";
 import { productSchema, z } from "../../../zod/Validation";
-interface SanitizeHtmlProps {
-  field: string;
-}
 interface BodyPropsInner {
   input: string;
   error: string;

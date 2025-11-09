@@ -9,6 +9,7 @@ import TextArea from "../../../components/TextArea";
 import { SelectWithConsumeApiFetchAll } from "../../../components/SelectWithConsumeApiFetch";
 import { productSchema, z } from "../../../../zod/Validation";
 import { useRouter } from "next/navigation";
+import { keyof } from "zod";
 interface ProductType {
   name: string;
   description: string;
@@ -41,7 +42,6 @@ export default function ProductEdit({ productId }: ProductIdPros) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isLoading, setIsLoading] = useState(true);
-  const [checkExist, setCheckExist] = useState(0);
   const bodyInner = {
     input: "",
     error: "",
@@ -100,7 +100,6 @@ export default function ProductEdit({ productId }: ProductIdPros) {
             id: { input: fetchedProduct.id },
             filename: { input: fetchedProduct.image },
           });
-          setCheckExist(1);
         }
       } catch (err) {
         console.error("Fetch error:", err);
@@ -112,7 +111,7 @@ export default function ProductEdit({ productId }: ProductIdPros) {
   }, [id]);
   if (isLoading) return <div>Loading</div>;
 
-  if (Object.keys(product).length == 0) return <div>Product Not Found</div>;
+  if (!product) return <div>Product Not Found</div>;
   const handleEvent = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
