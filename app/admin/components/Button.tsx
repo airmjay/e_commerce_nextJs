@@ -2,9 +2,10 @@ import React from "react";
 interface Props {
   style: string;
   text: string;
-  disabled: boolean;
+  disabled?: boolean;
 }
 const Button = ({ style, text, disabled, ...rest }: Props) => {
+  if (!disabled) disabled = false;
   return (
     <button
       disabled={disabled}

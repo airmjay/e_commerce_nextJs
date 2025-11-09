@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactHTMLElement, useEffect, useState } from "react";
+import React, { useState } from "react";
 import sanitizeHtml from "sanitize-html";
 import { Input } from "../../components/Input";
 import Button from "../../components/Button";
@@ -7,6 +7,7 @@ import Form from "../../components/Form";
 import TextArea from "../../components/TextArea";
 import { SelectWithConsumeApiFetchAll } from "../../components/SelectWithConsumeApiFetch";
 import { productSchema, z } from "../../../zod/Validation";
+import { keyof } from "zod";
 interface BodyPropsInner {
   input: string;
   error: string;
@@ -42,25 +43,31 @@ const AddProduct = () => {
     },
   });
 
-  const handleEvent = (e) => {
-    const { name, value, files } = e.target;
+  const handleEvent = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    const files = "files" in e.target ? e.target.files : null;
     const updatedValue = ["unit", "price", "category"].includes(name)
       ? Number(value) || ""
       : name === "image"
-      ? files[0] || null
+      ? files
+        ? files[0] || null
+        : null
       : value;
 
     setBody({
       ...body,
       [name]: {
-        ...body[name],
         input: updatedValue,
         error: "",
       },
     });
   };
-  const sanitizeInput = (input) => {
-    const sanitized = {};
+  const sanitizeInput = (input: Record<string, string | null>) => {
+    const sanitized: Record<string, string | null> = {};
     for (const field in input) {
       if (typeof input[field] === "string") {
         sanitized[field] = sanitizeHtml(input[field], {
@@ -74,7 +81,7 @@ const AddProduct = () => {
     }
     return sanitized;
   };
-  async function addApi(e) {
+  async function addApi(e: React.FormEvent) {
     e.preventDefault();
 
     const input = {
@@ -88,7 +95,7 @@ const AddProduct = () => {
     };
     const sanitizedInput = sanitizeInput(input);
     try {
-      const validate = productSchema.parse(sanitizedInput);
+      productSchema.parse(sanitizedInput);
       // Prepare FormData for API
       const formData = new FormData();
       Object.keys(sanitizedInput).forEach((key) => {
@@ -104,9 +111,9 @@ const AddProduct = () => {
     } catch (e) {
       if (e instanceof z.ZodError) {
         // Map Zod errors to the body state
-        const newBody: BodyProps = { ...body };
+        const newBody = { ...body };
         e.issues.forEach((issue) => {
-          const field = issue.path[0];
+          const field = issue.path[0] as keyof typeof body;
           if (newBody[field]) {
             newBody[field].error = issue.message;
           }
