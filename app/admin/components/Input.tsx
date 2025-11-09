@@ -9,7 +9,7 @@ interface Props {
   name?: string;
   error?: string;
   readOnly?: boolean;
-  value?: string | number | readonly string[]; // Add common value types
+  value?: string | number | undefined; // Add common value types
   onChange?: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement

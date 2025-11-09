@@ -75,7 +75,7 @@ export async function PUT(
     image: formData.get("image") ? formData.get("image").name : null,
     specification: formData.get("specification"),
   };
-  console.log(input);
+  console.log(formData.get);
   if (formData.get("image")) {
     await DeleteFile(input.filename);
     const file = formData.get("image");

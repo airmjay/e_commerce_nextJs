@@ -14,12 +14,12 @@ interface Props {
     >
   ) => void;
   name: string;
-  error: string;
-  value: string;
+  error: string | undefined;
+  value: string | number;
   label: string;
   readonly?: boolean | undefined;
   placeholder: string;
-  id: number;
+  id?: number;
 }
 const SelectWithConsumeApiFetch = ({
   id,
