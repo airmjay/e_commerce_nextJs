@@ -81,6 +81,7 @@ const page = async ({ params }: { params: { id: number } }) => {
                 label="Product description"
                 placeholder="Enter Your Product Description"
                 name="description"
+                readonly={true}
 
             />
             <Link
