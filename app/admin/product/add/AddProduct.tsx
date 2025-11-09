@@ -1,5 +1,5 @@
 "use client";
-import React, {useEffect, useState } from "react";
+import React, {ReactHTMLElement, useEffect, useState } from "react";
 import sanitizeHtml from "sanitize-html";
 import { Input } from "../../components/Input";
 import Button from "../../components/Button";
@@ -7,39 +7,46 @@ import Form from "../../components/Form";
 import TextArea from "../../components/TextArea";
 import {SelectWithConsumeApiFetchAll} from "../../components/SelectWithConsumeApiFetch";
 import { productSchema, z } from "../../../zod/Validation";
+interface SanitizeHtmlProps {
+    field : string
+}
+interface BodyPropsInner {
+    input: string;
+    error : string
+}
+interface BodyProps {
+    name : BodyPropsInner;
+        description: BodyPropsInner;
+        specification: BodyPropsInner;
+        unit: BodyPropsInner;
+        category: BodyPropsInner;
+        price: BodyPropsInner;
+        image: {
+            input: null,
+            error: ""
+        }
+
+}
 const AddProduct = () => {
-    const [body, setBody] = useState({
-        name: {
-            input: "",
-            error: ""
-        },
-        description: {
-            input: "",
-            error: ""
-        },
-        specification: {
-            input: "",
-            error: ""
-        },
-        unit: {
-            input: "",
-            error: ""
-        },
-        category: {
-            input: "",
-            error: ""
-        },
-        price: {
-            input: "",
-            error: ""
-        },
+    const bodyInner = {
+         input: "",
+        error: ""
+    }
+
+    const [body, setBody] = useState<BodyProps>({
+        name: bodyInner,
+        description: bodyInner,
+        specification: bodyInner,
+        unit: bodyInner,
+        category:bodyInner,
+        price:bodyInner,
         image: {
             input: null,
             error: ""
         }
     });
 
-    const handleEvent = e => {
+    const handleEvent = (e) => {
         const { name, value, files } = e.target;
         const updatedValue = ["unit", "price", "category"].includes(name)
             ? Number(value) || ""
@@ -93,10 +100,9 @@ const AddProduct = () => {
                     formData.append(key, sanitizedInput[key]);
                 }
             });
-            const addProduct = await fetch("/api/product", {
+           await fetch("/api/product", {
                 method: "POST",
                 body: formData,
-                Content_Type: "multipart/form-data"
             });
             alert("Product is added");
         } catch (e) {
@@ -118,7 +124,7 @@ const AddProduct = () => {
 
     return (
         <>
-            <Form submit={e => addApi(e)} FormTitle="Product Form">
+            <Form submit={(e:React.FormEvent<HTMLFormElement>) => addApi(e)} FormTitle="Product Form">
                 <Input
                     onChange={e => handleEvent(e)}
                     label="Product Name"

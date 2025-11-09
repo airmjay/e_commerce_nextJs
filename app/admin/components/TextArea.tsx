@@ -7,7 +7,8 @@ interface Props {
     error?: string;
     rows? : number;
     value? : string;
-    name? : string
+    name? : string;
+    readonly? : boolean | undefined
 }
 
 const TextArea = ({
@@ -17,12 +18,14 @@ const TextArea = ({
     label,
     error,
     rows,
+    readonly,
     ...rest
 }: Props) => {
     return (
         <div className={`col-span-6 ${col_span}`}>
             <label className="block mb-2 text-gray-500">{label}</label>
             <textarea
+                readOnly={readonly}
                 rows={rows}
                 placeholder={placeholder}
                 className={`border p-2 outline-0 border-gray-200 w-[100%] ${style}`}

@@ -34,19 +34,19 @@ const SelectWithConsumeApiFetch = ({readonly, id, ...rest} : Props ) => {
         >
             {category.map(item =>
                 item.id == Number(id) ? (
-                    <option key={item.id} value={item.id} selected>
+                    <option key={item.id} value={item.id} defaultValue={item.id}>
                         {item.name}
                     </option>
                 ) : (
                     <option key={item.id} value={item.id}>
-                        {item.name} {item.id}
+                        {item.name} 
                     </option>
                 )
             )}
         </SelectInput>
     );
 };
-const SelectWithConsumeApiFetchAll = ({ ...rest }) => {
+const SelectWithConsumeApiFetchAll = ({ readonly, ...rest }: Props) => {
     const [isLoading, setIsloading] = useState(true);
     const [category, setCategory] = useState<Category[]>([]);
     useEffect(() => {
@@ -63,7 +63,7 @@ const SelectWithConsumeApiFetchAll = ({ ...rest }) => {
     if (isLoading) return "loading";
     return (
         <SelectInput
-            readOnly
+            readOnly={readonly}
             name="category"
             label="Product Category"
             placeholder="Enter Your Product Category"
@@ -71,7 +71,7 @@ const SelectWithConsumeApiFetchAll = ({ ...rest }) => {
         >
             {category.map(item => (
                 <option key={item.id} value={item.id}>
-                    {item.name} {item.id}
+                    {item.name} 
                 </option>
             ))}
         </SelectInput>

@@ -14,9 +14,9 @@ interface ProductType {
     name: string;
     description: string;
     specification: string;
-    unit: int;
+    unit: number;
     category: string;
-    price: int;
+    price: number;
     image: null;
 }
 export default function ProductEdit({ productId }) {
@@ -105,8 +105,7 @@ export default function ProductEdit({ productId }) {
     }, [id]);
     if (isLoading) return <div>Loading</div>;
 
-    if (JSON.stringify(Object.keys(product).length) == 0)
-        return <div>Product Not Found</div>;
+    if(Object.keys(product).length == 0)  return <div>Product Not Found</div>;
     const handleEvent = e => {
         const { name, value, files } = e.target;
         const updatedValue = ["unit", "price", "category"].includes(name)

@@ -11,7 +11,7 @@ interface Props {
     readOnly?: boolean;
     value?: string | number | readonly string[]; // Add common value types
     onChange?: (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+        e:  React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
     ) => void;
 }
 const Input = ({ style, label, placeholder, error, type, readOnly ,...rest }: Props) => {
