@@ -6,7 +6,7 @@ import DeleteFile from "../../../utils/DeleteFile";
 import { join } from "path";
 import { randomUUID } from "crypto";
 import { writeFile } from "fs/promises";
-import { keyof } from "zod";
+
 // READ: Get single product
 interface ProductType {
   name: string;
@@ -49,7 +49,7 @@ export async function GET(
     return NextResponse.json(null);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch items" },
+      { error: "Failed to fetch items" + error },
       { status: 500 }
     );
   }
@@ -65,33 +65,47 @@ export async function PUT(
 ) {
   const id = Number(params.id);
   const formData = await request.formData();
+  const get = (key: string): string | File | null => formData.get(key);
+  let imageFile: File | null | string | undefined = get("image");
+  if (imageFile && typeof imageFile === "object" && "name" in imageFile) {
+    imageFile = imageFile?.name;
+  }
   const input = {
-    name: formData.get("name"),
-    description: formData.get("description"),
+    name: get("name"),
+    description: get("description"),
     filename: formData.get("filename"),
-    price: Number(formData.get("price")),
-    category: Number(formData.get("category")),
-    unit: Number(formData.get("unit")),
-    image: formData.get("image") ? formData.get("image").name : null,
+    price: Number(get("price")),
+    category: Number(get("category")),
+    unit: Number(get("unit")),
+    image: imageFile,
     specification: formData.get("specification"),
   };
-  console.log(formData.get);
+
+  let fileUpload: null | undefined | string | File | Promise<ArrayBuffer> =
+    get("image");
+  if (fileUpload instanceof File) {
+    fileUpload = fileUpload.arrayBuffer();
+  }
   if (formData.get("image")) {
     await DeleteFile(input.filename);
-    const file = formData.get("image");
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    // const file = formData.get("image");
+    const bytes: string | ArrayBuffer | null = await fileUpload;
+    if (!bytes) {
+      throw new Error("invalid: No file is upload");
+    }
+
+    const buffer = Buffer.from(bytes as ArrayBuffer);
     const fileuploadName =
       randomUUID().slice(0, 8) +
       Date.now() +
       "." +
-      getFileExtension(input.image);
+      getFileExtension(input.image as string);
     const filepath = join(process.cwd(), "public/uploads/", fileuploadName);
     await writeFile(filepath, buffer);
-    const [rows] = await pool.query(
-      `UPDATE product SET image = ? WHERE id = ? `,
-      [fileuploadName, id]
-    );
+    await pool.query(`UPDATE product SET image = ? WHERE id = ? `, [
+      fileuploadName,
+      id,
+    ]);
   }
   try {
     const [rows] = await pool.query(
@@ -111,12 +125,12 @@ export async function PUT(
     }
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch items" },
+      { error: "Failed to fetch items" + error },
       { status: 500 }
     );
   }
 }
-function getFileExtension(filename) {
+function getFileExtension(filename: string) {
   const parts = filename.split(".");
   if (parts.length > 1) {
     return parts.pop(); // Returns the last element (extension)
