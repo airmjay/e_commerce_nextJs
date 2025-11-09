@@ -7,9 +7,8 @@ import Button from "../../../components/Button";
 import Form from "../../../components/Form";
 import TextArea from "../../../components/TextArea";
 import { SelectWithConsumeApiFetchAll } from "../../../components/SelectWithConsumeApiFetch";
-import { productSchema, z } from "../../../../zod/Validation";
+import { z } from "../../../../zod/Validation";
 import { useRouter } from "next/navigation";
-import { keyof } from "zod";
 interface ProductType {
   name: string;
   description: string;
@@ -21,17 +20,6 @@ interface ProductType {
 }
 interface ProductIdPros {
   productId: number;
-}
-interface InputProps {
-  name: string;
-  description: string;
-  image: string;
-  price: number;
-  category: number;
-  unit: number;
-  specification: string;
-  id: number;
-  filename: string;
 }
 interface BodyInnerObjectText {
   input: string;

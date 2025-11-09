@@ -1,6 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
 import pool from "../../../../libs/db";
-import sanitizeHtml from "sanitize-html";
 
 import DeleteFile from "../../../utils/DeleteFile";
 import { join } from "path";
@@ -8,29 +7,7 @@ import { randomUUID } from "crypto";
 import { writeFile } from "fs/promises";
 
 // READ: Get single product
-interface ProductType {
-  name: string;
-  description: string;
-  specification: string;
-  unit: number;
-  category: string;
-  price: number;
-  image: null;
-}
-const sanitizeInput = (input: Record<string, string | number>) => {
-  const sanitized: Record<string, string | ProductType | number> = {};
-  for (const field in input) {
-    if (typeof input[field] === "string") {
-      sanitized[field] = sanitizeHtml(input[field], {
-        allowedTags: [],
-        allowedAttributes: {},
-      }).trim();
-    } else {
-      sanitized[field] = input[field];
-    }
-  }
-  return sanitized;
-};
+
 export async function GET(
   request: NextRequest,
 
@@ -87,7 +64,7 @@ export async function PUT(
     fileUpload = fileUpload.arrayBuffer();
   }
   if (formData.get("image")) {
-    await DeleteFile(input.filename);
+    await DeleteFile(input.filename as string);
     // const file = formData.get("image");
     const bytes: string | ArrayBuffer | null = await fileUpload;
     if (!bytes) {
