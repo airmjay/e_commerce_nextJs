@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@types/sanitize-html": "^2.16.0",
     "lightningcss": "^1.30.2",
     "mysql2": "^3.15.2",
     "next": "15.5.5",
