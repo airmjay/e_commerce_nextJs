@@ -1,14 +1,10 @@
-
-
+import Link from "next/link";
 const SideBar = () => {
-  return (
-  <>
-            <div
-                className="overflow-y-scroll col-span-3 hidden md:block p-2 shadow bg-white min-h-[100vh]">
+    return (
+        <>
+            <div className="overflow-y-scroll col-span-3 hidden md:block p-2 shadow bg-white min-h-[100vh]">
                 <div className="profile-image flex items-center gap-1">
-                    <div
-                        className="card-image rounded-full bg-black h-[50px] w-[50px]"
-                    ></div>
+                    <div className="card-image rounded-full bg-black h-[50px] w-[50px]"></div>
                     <div className="user-name">
                         <h3 className="text-gray-400">Abdulmajeed</h3>
                     </div>
@@ -17,67 +13,75 @@ const SideBar = () => {
                     </div>
                 </div>
                 <hr className="text-gray-200 my-2" />
-                
+
                 <ul className="p-2 text-gray-500 flex flex-col gap-2">
                     <li className="">
-                        <a
+                        <Link
+                            href="/admin/"
                             className="hover:text-[17px] hover:text-gray-400 cursor-pointer border-b border-gray-100 pb-1 flex justify-between items-center"
                         >
                             <span> Dashboard </span>
                             <i className="fa-solid fa-home"></i>
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a
+                        <Link
+                            href="/admin/dashboard"
                             className="hover:text-[17px] hover:text-gray-400 cursor-pointer border-b border-gray-100 pb-1 flex justify-between items-center"
                         >
-                            <span>Users</span> <i className="fa-solid fa-users"></i>
-                        </a>
+                            <span>Users</span>{" "}
+                            <i className="fa-solid fa-users"></i>
+                        </Link>
                     </li>
                     <li>
-                        <a
+                        <Link
+                            href="/admin/orders"
                             className="hover:text-[17px] hover:text-gray-400 cursor-pointer border-b border-gray-100 pb-1 flex justify-between items-center"
                         >
                             <span>Orders </span>
                             <i className="fa-solid fa-shopping-cart"></i>
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a
+                        <Link
+                            href="/admin/category"
                             className="hover:text-[17px] hover:text-gray-400 cursor-pointer border-b border-gray-100 pb-1 flex justify-between items-center"
                         >
                             <span>Categories</span>
                             <i className="fa-solid fa-tags"></i>
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a
+                        <Link
+                            href="/admin/product"
                             className="hover:text-[17px] hover:text-gray-400 cursor-pointer border-b border-gray-100 pb-1 flex justify-between items-center"
                         >
                             <span>Products</span>
                             <i className="fa-solid fa-gift"></i>
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a
+                        <Link
+                            href="/admin/setting"
                             className="hover:text-[17px] hover:text-gray-400 cursor-pointer border-b border-gray-100 pb-1 flex justify-between items-center"
                         >
                             <span>Settings</span>
                             <i className="fa-solid fa-gears"></i>
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a
+                        <Link
+                            href="/admin/logout"
                             className="hover:text-[17px] hover:text-gray-400 cursor-pointer border-b border-gray-100 pb-1 flex justify-between items-center"
                         >
                             <span>Logout</span>
                             <i className="fa-solid fa-right-from-bracket"></i>
-                        </a>
+                        </Link>
                     </li>
                 </ul>
             </div>
-            </>
-  )
-}
+        </>
+    );
+};
 
-export default SideBar
+export default SideBar;

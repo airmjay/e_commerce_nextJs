@@ -11,5 +11,12 @@ const productSchema = z.object({
     price: z.number().positive("Price must be positive"),
     category: z.number()
 });
+const CategorySchema = z.object({
+    name: z.string().min(3, "Name is required and min 3 chars")
+});
+const AuthSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(3)
+});
 
-export { productSchema, z };
+export { productSchema, z, CategorySchema , AuthSchema};

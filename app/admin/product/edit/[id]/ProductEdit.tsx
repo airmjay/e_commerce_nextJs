@@ -1,7 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useTransition } from "react";
-import sanitizeHtml from "sanitize-html";
+import fetchData from "../../../../config/httpRequest";
+import {
+  Body,
+  ProductIdPros,
+  ProductType,
+} from "../../../../config/ProductProps";
+import HandleEvent from "../../../../config/EventHandler";
+import sanitizeInput from "../../../../config/SanitizHtmlData";
 import { Input } from "../../../components/Input";
 import Button from "../../../components/Button";
 import Form from "../../../components/Form";
@@ -9,40 +16,7 @@ import TextArea from "../../../components/TextArea";
 import { SelectWithConsumeApiFetchAll } from "../../../components/SelectWithConsumeApiFetch";
 import { z } from "../../../../zod/Validation";
 import { useRouter } from "next/navigation";
-interface ProductType {
-  name: string;
-  description: string;
-  specification: string;
-  unit: number;
-  category: string;
-  price: number;
-  image: null;
-}
-interface ProductIdPros {
-  productId: number;
-}
-interface BodyInnerObjectText {
-  input: string;
-  error?: string;
-}
-interface BodyInnerObjectNumber {
-  input: number;
-  error?: string;
-}
-interface Body {
-  name: BodyInnerObjectText;
-  description: BodyInnerObjectText;
-  specification: BodyInnerObjectText;
-  unit: BodyInnerObjectNumber;
-  category: BodyInnerObjectNumber;
-  price: BodyInnerObjectNumber;
-  image: {
-    input: string;
-    error?: string;
-  };
-  id: BodyInnerObjectText;
-  filename: BodyInnerObjectText;
-}
+
 export default function ProductEdit({ productId }: ProductIdPros) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -66,53 +40,44 @@ export default function ProductEdit({ productId }: ProductIdPros) {
       input: "",
       error: "",
     },
-    id: bodyInnerText,
+    id: bodyInnerNumber,
     filename: bodyInnerText,
   });
-  const [product, setProduct] = useState<ProductType[] | undefined>();
+  const [product, setProduct] = useState<ProductType | undefined>();
   const id = productId;
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`http://localhost:3000/api/product/${id}`, {
-          cache: "no-store",
-          method: "GET",
+    const getApi = async () => {
+      const fetchedProduct = await fetchData<ProductType>(
+        "product",
+        id,
+        setIsLoading
+      );
+      // Populate form after data is fetched
+      if (fetchedProduct) {
+        setProduct(fetchedProduct);
+        setBody({
+          name: { input: fetchedProduct.name, error: "" },
+          description: {
+            input: fetchedProduct.description,
+            error: "",
+          },
+          specification: {
+            input: fetchedProduct.specification,
+            error: "",
+          },
+          unit: { input: fetchedProduct.unit, error: "" },
+          category: {
+            input: fetchedProduct.category_id,
+            error: "",
+          },
+          price: { input: fetchedProduct.price, error: "" },
+          image: { input: "", error: "" },
+          id: { input: fetchedProduct.id },
+          filename: { input: fetchedProduct.image },
         });
-
-        const products = await res.json();
-        const fetchedProduct = products[0];
-        if (fetchedProduct) {
-          setProduct(fetchedProduct);
-
-          // Populate form after data is fetched
-          setBody({
-            name: { input: fetchedProduct.name || "", error: "" },
-            description: {
-              input: fetchedProduct.description || "",
-              error: "",
-            },
-            specification: {
-              input: fetchedProduct.specification || "",
-              error: "",
-            },
-            unit: { input: fetchedProduct.unit || "", error: "" },
-            category: {
-              input: fetchedProduct.category_id || "",
-              error: "",
-            },
-            price: { input: fetchedProduct.price || "", error: "" },
-            image: { input: "", error: "" },
-            id: { input: fetchedProduct.id },
-            filename: { input: fetchedProduct.image },
-          });
-        }
-      } catch (err) {
-        console.error("Fetch error:", err);
-      } finally {
-        setIsLoading(false);
       }
     };
-    fetchData();
+    getApi();
   }, [id]);
   if (isLoading) return <div>Loading</div>;
 
@@ -122,41 +87,8 @@ export default function ProductEdit({ productId }: ProductIdPros) {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    const { name, value } = e.target;
-
-    const files = "files" in e.target ? e.target.files : null;
-    const updatedValue = ["unit", "price", "category"].includes(name)
-      ? Number(value) || ""
-      : name === "image"
-      ? files
-        ? files[0] || null
-        : null
-      : value;
-
-    setBody({
-      ...body,
-      [name]: { input: updatedValue, error: "" },
-    });
-  };
-  const sanitizeInput = (
-    input: Record<string, string | number | File | null>
-  ) => {
-    const sanitized: Record<string, string | number | File | null> = {};
-
-    for (const field in input) {
-      const value = input[field];
-
-      if (typeof value === "string") {
-        sanitized[field] = sanitizeHtml(value, {
-          allowedTags: [],
-          allowedAttributes: {},
-        }).trim();
-      } else {
-        sanitized[field] = value;
-      }
-    }
-
-    return sanitized;
+    const array = ["price", "unit", "categoory"];
+    HandleEvent(e, setBody, body, array);
   };
   async function UpdateApi(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

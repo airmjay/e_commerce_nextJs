@@ -65,7 +65,10 @@ const page = async ({ params }: { params: { id: number } }) => {
                 name="unit"
                 value={product.unit}
             />
-            <SelectWithConsumeApiFetch readonly={true} id={product.category_id} />
+            <SelectWithConsumeApiFetch
+                readonly={true}
+                id={product.category_id}
+            />
 
             <Input
                 value={product.price}
@@ -82,13 +85,12 @@ const page = async ({ params }: { params: { id: number } }) => {
                 placeholder="Enter Your Product Description"
                 name="description"
                 readonly={true}
-
             />
             <Link
                 href={`/admin/product/edit/${product.id}`}
                 className="col-span-4 rounded text-white p-2 bg-blue-700 hover:bg-blue-500"
             >
-                Update Product
+                Edit Product
             </Link>
         </div>
     );
