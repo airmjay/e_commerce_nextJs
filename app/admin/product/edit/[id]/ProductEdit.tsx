@@ -80,7 +80,6 @@ export default function ProductEdit({ productId }: ProductIdPros) {
     getApi();
   }, [id]);
   if (isLoading) return <div>Loading</div>;
-
   if (!product) return <div>Product Not Found</div>;
   const handleEvent = (
     e: React.ChangeEvent<
@@ -215,6 +214,7 @@ export default function ProductEdit({ productId }: ProductIdPros) {
           placeholder="Enter Your Product Description"
           name="description"
         />
+
         <Button disabled={isPending} style="col-span-6" text="Update Product" />
       </Form>
     </>

@@ -99,7 +99,6 @@ export default function CategoryEdit({ categoryId }: CategoryIdProps) {
       });
     } catch (e) {
       if (e instanceof z.ZodError) {
-        // Map Zod errors to the body state
         const newBody = { ...body };
         e.issues.forEach((issue) => {
           const field = issue.path[0] as keyof typeof body;

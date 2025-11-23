@@ -2,52 +2,58 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import pool from "../../../../libs/db";
+import { RowDataPacket } from "mysql2";
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-    providers: [
-        Credentials({
-            credentials: {
-                email: { label: "Email", type: "email" },
-                password: { label: "Password", type: "password" }
-            },
-            async authorize(credentials) {
-                if (!credentials?.email || !credentials?.password) return null;
-                const [users] = await pool.query(
-                    `SELECT * FROM users WHERE id = ?`,
-                    [credentials.email]
-                );
-                return users;
-                if (users.length === 0) return null;
+const authOptions = {
+  providers: [
+    Credentials({
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) return null;
+        const [users] = await pool.query(
+          `SELECT * FROM users WHERE email = ?`,
+          [credentials.email]
+        );
+        const UserFetch = users as RowDataPacket;
 
-                const user = users[0] as any;
-                const isValid = await bcrypt.compare(
-                    credentials.password as string,
-                    user.password
-                );
+        if (UserFetch.length === 0) return null;
 
-                if (!isValid) return null;
+        const user = UserFetch[0] as any;
+        const isValid = await bcrypt.compare(
+          credentials.password as string,
+          user.password
+        );
 
-                return {
-                    id: user.id,
-                    email: user.email,
-                    name: user.name
-                };
-            }
-        })
-    ],
-    pages: {
-        signIn: "/login"
+        if (!isValid) return null;
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.type,
+        };
+      },
+    }),
+  ],
+  pages: {
+    signIn: "/login",
+  },
+  session: { strategy: "jwt" },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.id = user.id;
+      return token;
     },
-    session: { strategy: "jwt" },
-    callbacks: {
-        async jwt({ token, user }) {
-            if (user) token.id = user.id;
-            return token;
-        },
-        async session({ session, token }) {
-            if (token.id) session.user.id = token.id as string;
-            return session;
-        }
+    async session({ session, token }) {
+      if (token.id) session.user.id = token.id as string;
+      return session;
     },
-    secret: process.env.NEXTAUTH_SECRET
-});
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+};
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };

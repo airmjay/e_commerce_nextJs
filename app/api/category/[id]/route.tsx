@@ -43,7 +43,7 @@ export async function PUT(
   const [rows] = await pool.query(`SELECT * FROM category WHERE name = ? `, [
     input.name,
   ]);
-  console.log(rows);
+
   const categoryRows = rows as RowDataPacket[];
 
   if (categoryRows.length > 0) {

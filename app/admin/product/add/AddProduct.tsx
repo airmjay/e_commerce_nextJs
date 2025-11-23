@@ -7,7 +7,7 @@ import Form from "../../components/Form";
 import TextArea from "../../components/TextArea";
 import { SelectWithConsumeApiFetchAll } from "../../components/SelectWithConsumeApiFetch";
 import { productSchema, z } from "../../../zod/Validation";
-import { keyof } from "zod";
+
 interface BodyPropsInner {
   input: string;
   error: string;

@@ -1,16 +1,101 @@
-import React from "react";
-import Link from "next/link";
+"use client";
+import Button from "@/app/admin/components/Button";
+import { Input } from "@/app/admin/components/Input";
+import sanitizeInput from "@/app/config/SanitizHtmlData";
+import { AuthSchema, z } from "@/app/zod/Validation";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+interface BodyPropsInner {
+  input: string;
+  error: string;
+}
+interface BodyProps {
+  email: BodyPropsInner;
+  password: BodyPropsInner;
+}
 const Login = () => {
+  const router = useRouter();
+  const bodyInner = {
+    input: "",
+    error: "",
+  };
+
+  const [body, setBody] = useState<BodyProps>({
+    email: bodyInner,
+    password: bodyInner,
+  });
+
+  const handleEvent = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+
+    const updatedValue = value;
+    setBody({
+      ...body,
+      [name]: {
+        input: updatedValue,
+        error: "",
+      },
+    });
+  };
+
+  async function LoginUser(e: React.FormEvent) {
+    e.preventDefault();
+    const input = {
+      email: body.email.input,
+      password: body.password.input,
+    };
+    const sanitizedInput = sanitizeInput(input);
+    try {
+      AuthSchema.parse(sanitizedInput);
+      const handleLoginSign = async () => {
+        const result = await signIn("credentials", {
+          redirect: false,
+          email: sanitizedInput.email,
+          password: sanitizedInput.password,
+          callbackUrl: "/",
+        });
+        if (result?.error) {
+          alert("Wrong credentials: Invalid Password and Email");
+        } else if (result?.ok) {
+          router.push("/");
+        }
+      };
+      handleLoginSign();
+    } catch (e) {
+      if (e instanceof z.ZodError) {
+        // Map Zod errors to the body state
+        const newBody = { ...body };
+        e.issues.forEach((issue) => {
+          const field = issue.path[0] as keyof typeof body;
+          if (newBody[field]) {
+            newBody[field].error = issue.message;
+          }
+        });
+        setBody(newBody);
+      } else {
+        console.error("Unexpected error:", e);
+      }
+    }
+  }
   return (
-    <div className="relative">
+    <form
+      onSubmit={(e: React.FormEvent<HTMLFormElement>) => LoginUser(e)}
+      className="relative"
+    >
       <Link
         href="/"
-        className="inline-block mt-2 mx-8 button-color hover:text-blue-300 text-white p-2"
+        className="inline-block mt-2 text-blue-500 mx-8 button-color hover:text-blue-300 text-white p-2"
       >
         Home
       </Link>
-      <div className="grid grid-cols-1 md:grid-cols-12 m-8 justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-12 mb-2 mt-2 md:mx-[100px] justify-center">
         <div className="shadow md:col-span-5 h-[100vh] hidden md:block">
           <Image
             src="/images/Login.png"
@@ -21,57 +106,54 @@ const Login = () => {
             className="h-full"
           />
         </div>
-        <div className="shadow md:col-span-7 flex flex-col gap-2 justify-center">
+        <div className="shadow md:col-span-7 flex flex-col gap-2 mt-[50px]">
           <h2 className="text-center font-extrabold text-2xl text-gray-500">
             Login Page
           </h2>
           <div className="form-group px-8">
-            <label htmlFor="email" className="text-gray-500">
-              Enter your email
-            </label>
-            <div className="items-center flex p-2 bg-white rounded shadow">
-              <i className="fa-solid fa-envelope"></i>
-              <input
-                type="email"
-                id="email"
-                className="bg-transparent outline-0 w-full p-2"
-                placeholder="Enter your email e.g email@gmail.com"
-              />
-            </div>
+            <Input
+              onChange={(e) => handleEvent(e)}
+              label=" Enter your email"
+              placeholder="Enter Your email e.g x@gmail.com"
+              type="text"
+              name="email"
+              style="bg-transparent outline-0 w-full p-2"
+              error={body.email.error}
+              value={body.email.input}
+            />
           </div>
           <div className="form-group px-8">
-            <label htmlFor="password" className="text-gray-500">
-              Enter your Password
-            </label>
-            <div className="items-center flex p-2 bg-white rounded shadow">
-              <i className="fa-solid fa-lock"></i>
-              <input
-                type="password"
-                id="password"
-                className="bg-transparent outline-0 w-full p-2"
-                placeholder="Enter your password"
-              />
-            </div>
+            <Input
+              onChange={(e) => handleEvent(e)}
+              label=" Enter your Password"
+              placeholder="Enter Your password"
+              type="Password"
+              name="password"
+              style="bg-transparent outline-0 w-full p-2"
+              error={body.password.error}
+              value={body.password.input}
+            />
           </div>
           <div className="flex gap-1 px-8">
             <input type="checkbox" className="border p-1 bg-orange-400" />
             <span> Remember Me </span>
           </div>
           <div className="px-8">
-            <button className="w-full button-color hover:bg-blue-500 hover:text-gray-700 p-2 text-white outline-0 border-0">
-              Login
-            </button>
+            <Button
+              style="w-full button-color hover:bg-blue-500 hover:text-gray-700 p-2 text-white outline-0 border-0"
+              text="Signup"
+            />
           </div>
           <hr className="bg-gray-400 my-1" />
           <div className="px-8 text-center text-gray-500">
-            If you don`t have an account:
+            Already have an account:
             <Link className="underline text-blue-500" href="/register">
-              SignUp
+              SignIn
             </Link>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
