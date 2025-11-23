@@ -1,10 +1,28 @@
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import pool from "../../../../libs/db";
 import { RowDataPacket } from "mysql2";
+import { DefaultSession, DefaultUser } from "next-auth";
+import { JWT } from "next-auth/jwt";
 
-const authOptions = {
+declare module "next-auth" {
+  interface User extends DefaultUser {
+    id: string;
+  }
+
+  interface Session extends DefaultSession {
+    user: {
+      id: string;
+    } & DefaultSession["user"];
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {}
+}
+
+const authOptions: AuthOptions = {
   providers: [
     Credentials({
       credentials: {
@@ -48,7 +66,11 @@ const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      if (token.id) session.user.id = token.id as string;
+      if (token.id) {
+        if (session.user) {
+          session.user.id = token.id as string;
+        }
+      }
       return session;
     },
   },
