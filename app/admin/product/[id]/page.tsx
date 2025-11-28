@@ -65,7 +65,11 @@ const page = async ({ params }: { params: { id: number } }) => {
         name="unit"
         value={product.unit}
       />
-      <SelectWithConsumeApiFetch readonly={true} id={product.category_id} />
+      <SelectWithConsumeApiFetch
+        label="Product Category"
+        readonly={true}
+        id={product.category_id}
+      />
 
       <Input
         value={product.price}
